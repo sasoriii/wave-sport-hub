@@ -25,8 +25,7 @@ const ActivityCard = ({ title, imageUrl }: ActivityCardProps) => {
           </Button>
           
           <Button
-            variant="outline"
-            className="w-40 border-white text-white hover:bg-white/10 transition-colors duration-200"
+            className="w-40 bg-blue-500 hover:bg-blue-600 text-white transition-colors duration-200"
           >
             En savoir plus
           </Button>
