@@ -1,20 +1,23 @@
 import Navbar from "@/components/Navbar";
 import ActivityCard from "@/components/ActivityCard";
 
+
 const activities = [
   {
     title: "Kitesurf",
-    imageUrl: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&q=80",
+    imageUrl: kitesurfImg,
   },
   {
     title: "Wingfoil",
-    imageUrl: "https://images.unsplash.com/photo-1518877593221-1f28583780b4?auto=format&fit=crop&q=80",
+    imageUrl: wingfoilImg,
   },
   {
     title: "Efoil",
-    imageUrl: "https://images.unsplash.com/photo-1487252665478-49b61b47f302?auto=format&fit=crop&q=80",
+    imageUrl: efoilImg,
   },
 ];
+
+
 
 const Index = () => {
   return (
