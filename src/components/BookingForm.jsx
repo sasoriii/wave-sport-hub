@@ -29,26 +29,37 @@ const BookingForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Choisissez une date :
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Choisissez une date :
+        </label>
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           required
         />
-      </label>
-      <label>
-        Votre email :
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">
+          Votre email :
+        </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
           required
         />
-      </label>
-      <button type="submit">Réserver</button>
+      </div>
+      <button
+        type="submit"
+        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      >
+        Réserver
+      </button>
     </form>
   );
 };

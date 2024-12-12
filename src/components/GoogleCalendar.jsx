@@ -28,11 +28,20 @@ const GoogleCalendar = () => {
 
   return (
     <div>
-      <button onClick={handleAuthClick}>Connecter Google Calendar</button>
-      <button onClick={handleSignOutClick}>Déconnecter</button>
+      <button
+        onClick={handleAuthClick}
+        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+      >
+        Connecter Google Calendar
+      </button>
+      <button
+        onClick={handleSignOutClick}
+        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 ml-4"
+      >
+        Déconnecter
+      </button>
     </div>
   );
 };
 
-// Assurez-vous que le composant est exporté par défaut
 export default GoogleCalendar;
