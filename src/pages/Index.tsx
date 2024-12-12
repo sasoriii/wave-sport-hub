@@ -1,5 +1,8 @@
 import Navbar from "@/components/Navbar";
 import ActivityCard from "@/components/ActivityCard";
+import kitesurfImg from "@/assets/images/kitesurf.jpg";
+import wingfoilImg from "@/assets/images/wingfoil.jpg";
+import efoilImg from "@/assets/images/efoil.jpg";
 
 
 const activities = [
