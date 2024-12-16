@@ -5,18 +5,17 @@ const ReservationForm = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    firstNameReservation: "",
+    lastNameReservation: "",
     email: "",
     address: "",
     city: "",
     phone: "",
-    participantFirstName: "",
-    participantLastName: "",
+    firstNameRider: "",
+    LastNameRider: "",
     birthDay: "",
     birthMonth: "",
     birthYear: "",
-    participantPhone: "",
     height: "",
     weight: "",
     suitSize: "",
@@ -53,7 +52,7 @@ const ReservationForm = () => {
                   name="firstName"
                   required
                   className="w-full p-2 border rounded"
-                  value={formData.firstName}
+                  value={formData.firstNameReservation}
                   onChange={handleChange}
                 />
               </div>
@@ -64,7 +63,7 @@ const ReservationForm = () => {
                   name="lastName"
                   required
                   className="w-full p-2 border rounded"
-                  value={formData.lastName}
+                  value={formData.lastNameReservation}
                   onChange={handleChange}
                 />
               </div>
@@ -125,7 +124,7 @@ const ReservationForm = () => {
                   name="participantFirstName"
                   required
                   className="w-full p-2 border rounded"
-                  value={formData.participantFirstName}
+                  value={formData.firstNameRider}
                   onChange={handleChange}
                 />
               </div>
@@ -136,7 +135,7 @@ const ReservationForm = () => {
                   name="participantLastName"
                   required
                   className="w-full p-2 border rounded"
-                  value={formData.participantLastName}
+                  value={formData.LastNameRider}
                   onChange={handleChange}
                 />
               </div>
