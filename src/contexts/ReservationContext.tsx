@@ -10,6 +10,17 @@ type ReservationData = {
   firstNameRider: string;
   lastNameRider: string;
   selectedDate: Date | null;
+  birthDay: string;
+  birthMonth: string;
+  birthYear: string;
+  height: string;
+  weight: string;
+  suitSize: string;
+  shoeSize: string;
+  level: string;
+  sport: string;
+  sports: string[];
+  selectedSport: string;
 };
 
 type ReservationContextType = {
@@ -30,6 +41,17 @@ const ReservationProvider: React.FC<{ children: React.ReactNode }> = ({ children
     email: "",
     phone: "",
     selectedDate: null,
+    birthDay: "",
+    birthMonth: "",
+    birthYear: "",
+    height: "",
+    weight: "",
+    suitSize: "",
+    shoeSize: "",
+    level: "",
+    sport: "",
+    sports: [],
+    selectedSport: ""
   });
 
   const updateData = (newData: Partial<ReservationData>) => {

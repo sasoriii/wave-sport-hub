@@ -8,7 +8,7 @@ import Reservation from "./pages/ReservationForm";
 import ActivityDetail from "./pages/ActivityDetails";
 import TYpages from "./pages/TYpages";
 import Calendrier from "./pages/Calendrier";
-import { ReservationProvider } from "./context/ReservationContext";
+import { ReservationProvider } from "./contexts/ReservationContext";
 
 const queryClient = new QueryClient();
 

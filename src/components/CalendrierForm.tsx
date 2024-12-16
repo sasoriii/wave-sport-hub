@@ -1,7 +1,7 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { useNavigate } from "react-router-dom";
-import { useReservation } from "@/context/ReservationContext"; // Utiliser le contexte partagé
+import { useReservation } from "../contexts/ReservationContext"; // Fixed import path
 
 const CalendrierForm = () => {
   const { data, updateData } = useReservation(); // Récupérer les données et la fonction de mise à jour
@@ -11,9 +11,49 @@ const CalendrierForm = () => {
     updateData({ selectedDate: date }); // Mettre à jour la date sélectionnée dans le contexte
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (data.selectedDate) {
-      navigate("/confirmation"); // Naviguer vers la page de confirmation
+      try {
+        // Prepare the info string with all collected data
+        const info = `
+          Reservation: ${data.firstNameReservation} ${data.lastNameReservation}
+          Address: ${data.address}, ${data.city}
+          Phone: ${data.phone}
+          Rider: ${data.firstNameRider} ${data.lastNameRider}
+          Birth Date: ${data.birthDay}/${data.birthMonth}/${data.birthYear}
+          Height: ${data.height}cm
+          Weight: ${data.weight}kg
+          Suit Size: ${data.suitSize}
+          Shoe Size: ${data.shoeSize}
+          Level: ${data.level}
+        `.trim();
+
+        // Format the date as YYYY-MM-DD
+        const formattedDate = data.selectedDate.toISOString().split('T')[0];
+
+        const response = await fetch('https://back.jeremgabriel.com/HiptoForm/index.php/API/addEvent', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sport: data.sport.toLowerCase(), // Utiliser le champ sport
+            email: data.email,
+            date: formattedDate,
+            info: info
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit reservation');
+        }
+
+        // If successful, navigate to confirmation page
+        navigate("/confirmation");
+      } catch (error) {
+        console.error('Error submitting reservation:', error);
+        alert("Une erreur s'est produite lors de la réservation. Veuillez réessayer.");
+      }
     } else {
       alert("Veuillez sélectionner une date.");
     }

@@ -1,8 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useReservation } from "../contexts/ReservationContext.tsx"; // Import the ReservationContext
 
 const ReservationForm = () => {
   const navigate = useNavigate();
+  const { sport } = useParams();
+  const { updateData } = useReservation(); // Use the updateData function from the ReservationContext
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     firstNameReservation: "",
@@ -12,7 +15,7 @@ const ReservationForm = () => {
     city: "",
     phone: "",
     firstNameRider: "",
-    LastNameRider: "",
+    lastNameRider: "",
     birthDay: "",
     birthMonth: "",
     birthYear: "",
@@ -21,15 +24,44 @@ const ReservationForm = () => {
     suitSize: "",
     shoeSize: "",
     level: "",
+    sport: "",  // Ajout du champ sport
     sports: [] as string[],
   });
+
+  useEffect(() => {
+    if (sport) {
+      setFormData(prev => ({ ...prev, sport: sport.toLowerCase() }));
+      updateData({ selectedSport: sport.toLowerCase() });
+    }
+  }, [sport, updateData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1) {
       setStep(2);
     } else {
-      navigate("/Calendar"); // You'll need to implement the calendar page
+      // Sauvegarder toutes les données dans le contexte avant de naviguer
+      updateData({
+        firstNameReservation: formData.firstNameReservation,
+        lastNameReservation: formData.lastNameReservation,
+        email: formData.email,
+        address: formData.address,
+        city: formData.city,
+        phone: formData.phone,
+        firstNameRider: formData.firstNameRider,
+        lastNameRider: formData.lastNameRider,
+        birthDay: formData.birthDay,
+        birthMonth: formData.birthMonth,
+        birthYear: formData.birthYear,
+        height: formData.height,
+        weight: formData.weight,
+        suitSize: formData.suitSize,
+        shoeSize: formData.shoeSize,
+        level: formData.level,
+        sport: formData.sport,  // Ajout du sport dans la mise à jour
+        sports: formData.sports
+      });
+      navigate("/Calendar");
     }
   };
 
@@ -49,7 +81,7 @@ const ReservationForm = () => {
                 <label className="block text-sm font-medium mb-1">Prénom *</label>
                 <input
                   type="text"
-                  name="firstName"
+                  name="firstNameReservation"
                   required
                   className="w-full p-2 border rounded"
                   value={formData.firstNameReservation}
@@ -60,7 +92,7 @@ const ReservationForm = () => {
                 <label className="block text-sm font-medium mb-1">Nom *</label>
                 <input
                   type="text"
-                  name="lastName"
+                  name="lastNameReservation"
                   required
                   className="w-full p-2 border rounded"
                   value={formData.lastNameReservation}
@@ -121,7 +153,7 @@ const ReservationForm = () => {
                 <label className="block text-sm font-medium mb-1">Prénom *</label>
                 <input
                   type="text"
-                  name="participantFirstName"
+                  name="firstNameRider"
                   required
                   className="w-full p-2 border rounded"
                   value={formData.firstNameRider}
@@ -132,10 +164,10 @@ const ReservationForm = () => {
                 <label className="block text-sm font-medium mb-1">Nom *</label>
                 <input
                   type="text"
-                  name="participantLastName"
+                  name="lastNameRider"
                   required
                   className="w-full p-2 border rounded"
-                  value={formData.LastNameRider}
+                  value={formData.lastNameRider}
                   onChange={handleChange}
                 />
               </div>
