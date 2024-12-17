@@ -1,20 +1,24 @@
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { DayPicker } from "react-day-picker";
+import { format } from "date-fns";
+import { fr } from 'date-fns/locale';
+import "react-day-picker/dist/style.css";
 import { useNavigate } from "react-router-dom";
-import { useReservation } from "../contexts/ReservationContext"; // Fixed import path
+import { useReservation } from "../contexts/ReservationContext";
+import { motion } from "framer-motion";
 
 const CalendrierForm = () => {
-  const { data, updateData } = useReservation(); // Récupérer les données et la fonction de mise à jour
+  const { data, updateData } = useReservation();
   const navigate = useNavigate();
 
-  const handleDateChange = (date: Date) => {
-    updateData({ selectedDate: date }); // Mettre à jour la date sélectionnée dans le contexte
+  const handleDateChange = (date: Date | undefined) => {
+    if (date) {
+      updateData({ selectedDate: date });
+    }
   };
 
   const handleConfirm = async () => {
     if (data.selectedDate) {
       try {
-        // Prepare the info string with all collected data
         const info = `
           Reservation: ${data.firstNameReservation} ${data.lastNameReservation}
           Address: ${data.address}, ${data.city}
@@ -28,7 +32,6 @@ const CalendrierForm = () => {
           Level: ${data.level}
         `.trim();
 
-        // Format the date as YYYY-MM-DD
         const formattedDate = data.selectedDate.toISOString().split('T')[0];
 
         const response = await fetch('https://back.jeremgabriel.com/HiptoForm/index.php/API/addEvent', {
@@ -38,7 +41,7 @@ const CalendrierForm = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            sport: data.sport.toLowerCase(), // Utiliser le champ sport
+            sport: data.sport.toLowerCase(),
             email: data.email,
             date: formattedDate,
             info: info
@@ -49,7 +52,6 @@ const CalendrierForm = () => {
           throw new Error('Failed to submit reservation');
         }
 
-        // If successful, navigate to confirmation page
         navigate("/confirmation");
       } catch (error) {
         console.error('Error submitting reservation:', error);
@@ -60,26 +62,87 @@ const CalendrierForm = () => {
     }
   };
 
+  const css = `
+    .rdp {
+      --rdp-cell-size: 45px;
+      --rdp-accent-color: #3b82f6;
+      --rdp-background-color: #e0e7ff;
+      margin: 0;
+    }
+    .rdp-day_selected:not([disabled]) { 
+      background-color: var(--rdp-accent-color);
+      color: white;
+      font-weight: bold;
+    }
+    .rdp-day_selected:hover:not([disabled]) {
+      background-color: #2563eb;
+    }
+    .rdp-day:hover:not([disabled]) {
+      background-color: #dbeafe;
+    }
+  `;
+
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6">Choisissez une date</h2>
-      <div className="flex justify-center">
-        <Calendar
-          onChange={handleDateChange}
-          value={data.selectedDate}
-          minDate={new Date()}
-          locale="fr-FR"
-        />
-      </div>
-      <div className="mt-6 flex justify-end">
-        <button
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-2xl mx-auto p-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl"
+    >
+      <style>{css}</style>
+      <motion.h2 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-3xl font-bold mb-8 text-gray-800"
+      >
+        Choisissez une date
+      </motion.h2>
+      
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4 }}
+        className="flex flex-col items-center space-y-6"
+      >
+        <div className="p-4 bg-white rounded-xl shadow-lg">
+          <DayPicker
+            mode="single"
+            selected={data.selectedDate}
+            onSelect={handleDateChange}
+            locale={fr}
+            fromDate={new Date()}
+            modifiers={{
+              disabled: [
+                { before: new Date() }
+              ]
+            }}
+            modifiersStyles={{
+              disabled: { color: '#ddd' }
+            }}
+          />
+        </div>
+
+        {data.selectedDate && (
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-lg font-medium text-gray-800"
+          >
+            Date sélectionnée : {format(data.selectedDate, 'dd MMMM yyyy', { locale: fr })}
+          </motion.p>
+        )}
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleConfirm}
-          className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+          className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-colors"
         >
-          Confirmer
-        </button>
-      </div>
-    </div>
+          Confirmer la réservation
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 };
 

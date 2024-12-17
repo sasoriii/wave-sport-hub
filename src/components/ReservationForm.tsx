@@ -97,254 +97,258 @@ const ReservationForm = () => {
   });
 
   const onSubmit = (data: FormValues) => {
-    console.log("Form submitted:", data);
     if (step === 1) {
       setStepOneData(data);
       setStep(2);
-      reset({
-        ...data,
-        firstNameRider: "",
-        lastNameRider: "",
-        birthDate: undefined,
-        height: "",
-        weight: "",
-        suitSize: "",
-        shoeSize: "",
-        level: "",
-      });
+      window.scrollTo(0, 0);
     } else {
-      updateData({
-        ...stepOneData,
-        ...data,
-        selectedDate: data.birthDate || null,
-        sport: sportFromState,
-      });
-      navigate("/Calendar");
+      updateData(data);
+      navigate("/calendar", { state: { formData: data } });
     }
   };
 
+  const backgroundImage = getBackgroundImage(sport || sportFromState || "");
+
   return (
-    <div 
-      className="min-h-screen bg-cover bg-center"
-      style={{ 
-        backgroundImage: `url(${getBackgroundImage(sportFromState || '')})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-    >
-      <div className="min-h-screen bg-black/60">
-        <div className="container mx-auto pt-20">
-          <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-            {step === 1 ? (
-              <>
-                <h2 className="text-2xl font-bold mb-6">Informations personnelles</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Prénom *</label>
-                    <input
-                      {...register("firstNameReservation")}
-                      className="w-full p-2 border rounded"
-                    />
-                    {errors.firstNameReservation && (
-                      <p className="text-red-500 text-sm">{errors.firstNameReservation.message}</p>
-                    )}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/0 to-blue-100/0 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+          {/* Header */}
+          <div className="bg-blue-600 py-12 px-6 relative">
+            <h2 className="text-3xl font-bold text-white text-center">
+              {step === 1 ? "Informations de réservation" : "Informations du rider"}
+            </h2>
+          </div>
+
+          {/* Indicateur de progression */}
+          <div className="px-8 pt-6">
+            <div className="flex items-center justify-between mb-8">
+              <div className="w-full">
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                  }`}>
+                    1
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Nom *</label>
-                    <input
-                      {...register("lastNameReservation")}
-                      className="w-full p-2 border rounded"
-                    />
-                    {errors.lastNameReservation && (
-                      <p className="text-red-500 text-sm">{errors.lastNameReservation.message}</p>
-                    )}
+                  <div className={`flex-1 h-1 mx-4 ${
+                    step === 2 ? 'bg-blue-600' : 'bg-gray-200'
+                  }`}></div>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'
+                  }`}>
+                    2
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">E-mail *</label>
-                  <input
-                    type="email"
-                    {...register("email")}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm">{errors.email.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Adresse *</label>
-                  <input
-                    {...register("address")}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.address && (
-                    <p className="text-red-500 text-sm">{errors.address.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Ville *</label>
-                  <input
-                    {...register("city")}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.city && (
-                    <p className="text-red-500 text-sm">{errors.city.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Téléphone *</label>
-                  <input
-                    {...register("phone")}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.phone && (
-                    <p className="text-red-500 text-sm">{errors.phone.message}</p>
-                  )}
-                </div>
-              </>
-            ) : (
-              <>
-                <h2 className="text-2xl font-bold mb-6">Informations du rider</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Prénom *</label>
-                    <input
-                      {...register("firstNameRider")}
-                      className="w-full p-2 border rounded"
-                    />
-                    {errors.firstNameRider && (
-                      <p className="text-red-500 text-sm">{errors.firstNameRider.message}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Nom *</label>
-                    <input
-                      {...register("lastNameRider")}
-                      className="w-full p-2 border rounded"
-                    />
-                    {errors.lastNameRider && (
-                      <p className="text-red-500 text-sm">{errors.lastNameRider.message}</p>
-                    )}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1">Date de naissance *</label>
-                  <Controller
-                    control={control}
-                    name="birthDate"
-                    render={({ field: { onChange, value } }) => (
-                      <DatePicker
-                        selected={value}
-                        onChange={onChange}
-                        dateFormat="dd/MM/yyyy"
-                        locale="fr"
-                        showYearDropdown
-                        scrollableYearDropdown
-                        yearDropdownItemNumber={100}
-                        placeholderText="Sélectionnez une date"
-                        className="w-full p-2 border rounded"
-                        maxDate={new Date()}
+          <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8">
+            <div className="space-y-6">
+              {step === 1 ? (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Prénom</label>
+                      <input
+                        {...register("firstNameReservation")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
-                    )}
-                  />
-                  {errors.birthDate && (
-                    <p className="text-red-500 text-sm">{errors.birthDate.message}</p>
-                  )}
-                </div>
+                      {errors.firstNameReservation && (
+                        <p className="mt-1 text-sm text-red-600">{errors.firstNameReservation.message}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Nom</label>
+                      <input
+                        {...register("lastNameReservation")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.lastNameReservation && (
+                        <p className="mt-1 text-sm text-red-600">{errors.lastNameReservation.message}</p>
+                      )}
+                    </div>
+                  </div>
 
-                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Taille (cm) *</label>
+                    <label className="block text-sm font-medium text-gray-700">Email</label>
                     <input
-                      {...register("height")}
-                      className="w-full p-2 border rounded"
+                      {...register("email")}
+                      type="email"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
-                    {errors.height && (
-                      <p className="text-red-500 text-sm">{errors.height.message}</p>
+                    {errors.email && (
+                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
                     )}
                   </div>
+
                   <div>
-                    <label className="block text-sm font-medium mb-1">Poids (kg) *</label>
+                    <label className="block text-sm font-medium text-gray-700">Téléphone</label>
                     <input
-                      {...register("weight")}
-                      className="w-full p-2 border rounded"
+                      {...register("phone")}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
-                    {errors.weight && (
-                      <p className="text-red-500 text-sm">{errors.weight.message}</p>
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
                     )}
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Taille combinaison *</label>
-                  <select
-                    {...register("suitSize")}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="">Sélectionner</option>
-                    <option value="J'ai ma combinaison">J'ai ma combinaison</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                  </select>
-                  {errors.suitSize && (
-                    <p className="text-red-500 text-sm">{errors.suitSize.message}</p>
-                  )}
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Adresse</label>
+                    <input
+                      {...register("address")}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {errors.address && (
+                      <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+                    )}
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Pointure *</label>
-                  <input
-                    {...register("shoeSize")}
-                    className="w-full p-2 border rounded"
-                  />
-                  {errors.shoeSize && (
-                    <p className="text-red-500 text-sm">{errors.shoeSize.message}</p>
-                  )}
-                </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Ville</label>
+                    <input
+                      {...register("city")}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {errors.city && (
+                      <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Prénom du rider</label>
+                      <input
+                        {...register("firstNameRider")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.firstNameRider && (
+                        <p className="mt-1 text-sm text-red-600">{errors.firstNameRider.message}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Nom du rider</label>
+                      <input
+                        {...register("lastNameRider")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.lastNameRider && (
+                        <p className="mt-1 text-sm text-red-600">{errors.lastNameRider.message}</p>
+                      )}
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-1">Niveau *</label>
-                  <select
-                    {...register("level")}
-                    className="w-full p-2 border rounded"
-                  >
-                    <option value="">Sélectionner</option>
-                    <option value="never">Jamais pratiqué</option>
-                    <option value="beginner">Débutant</option>
-                    <option value="intermediate">Intermédiaire</option>
-                    <option value="advanced">Avancé</option>
-                    <option value="expert">Expert</option>
-                  </select>
-                  {errors.level && (
-                    <p className="text-red-500 text-sm">{errors.level.message}</p>
-                  )}
-                </div>
-              </>
-            )}
-            <div className="flex justify-between mt-6">
-              {step === 2 && (
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                >
-                  Retour
-                </button>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Date de naissance</label>
+                    <Controller
+                      control={control}
+                      name="birthDate"
+                      render={({ field }) => (
+                        <DatePicker
+                          selected={field.value}
+                          onChange={(date) => field.onChange(date)}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          dateFormat="dd/MM/yyyy"
+                          locale="fr"
+                          placeholderText="Sélectionnez une date"
+                        />
+                      )}
+                    />
+                    {errors.birthDate && (
+                      <p className="mt-1 text-sm text-red-600">{errors.birthDate.message}</p>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Taille (cm)</label>
+                      <input
+                        {...register("height")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.height && (
+                        <p className="mt-1 text-sm text-red-600">{errors.height.message}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Poids (kg)</label>
+                      <input
+                        {...register("weight")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.weight && (
+                        <p className="mt-1 text-sm text-red-600">{errors.weight.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Taille combinaison</label>
+                      <select
+                        {...register("suitSize")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      >
+                        <option value="">Sélectionnez une taille</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                      </select>
+                      {errors.suitSize && (
+                        <p className="mt-1 text-sm text-red-600">{errors.suitSize.message}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Pointure</label>
+                      <input
+                        {...register("shoeSize")}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                      {errors.shoeSize && (
+                        <p className="mt-1 text-sm text-red-600">{errors.shoeSize.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Niveau</label>
+                    <select
+                      {...register("level")}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="">Sélectionnez un niveau</option>
+                      <option value="debutant">Débutant</option>
+                      <option value="intermediaire">Intermédiaire</option>
+                      <option value="avance">Avancé</option>
+                    </select>
+                    {errors.level && (
+                      <p className="mt-1 text-sm text-red-600">{errors.level.message}</p>
+                    )}
+                  </div>
+                </>
               )}
-              <button
-                type="submit"
-                className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-              >
-                {step === 1 ? "Suivant" : "Réserver"}
-              </button>
+
+              <div className="flex justify-between pt-6">
+                {step === 2 && (
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Retour
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  className="ml-auto inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                >
+                  {step === 1 ? "Suivant" : "Réserver"}
+                </button>
+              </div>
             </div>
           </form>
         </div>
