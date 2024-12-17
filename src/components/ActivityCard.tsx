@@ -19,10 +19,11 @@ const ActivityCard = ({ title, imageUrl }: ActivityCardProps) => {
         <h2 className="text-4xl font-bold text-white tracking-wider">{title}</h2>
         
         <div className="space-x-4">
-          <Link
-            to={`/reservation/${title.toLowerCase()}`}
-            className="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-          >
+        <Link
+          to={`/reservation/${title.toLowerCase()}`}
+          state={{ sport: title.toLowerCase() }}
+          className="inline-block bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+        >
             Réserver
           </Link>
           <Link

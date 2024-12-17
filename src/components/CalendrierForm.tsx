@@ -74,7 +74,7 @@ const CalendrierForm = () => {
       <div className="mt-6 flex justify-end">
         <button
           onClick={handleConfirm}
-          className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+          className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition-colors"
         >
           Confirmer
         </button>
