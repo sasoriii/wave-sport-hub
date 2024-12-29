@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import kitesurfImg from "@/assets/images/kitesurf.jpg";
 import wingfoilImg from "@/assets/images/wingfoil.jpg";
 import efoilImg from "@/assets/images/efoil.jpg";
+import portImg from "@/assets/images/port.jpg";
 
 const Reservation = () => {
   const { sport } = useParams();
@@ -17,7 +18,7 @@ const Reservation = () => {
       case 'efoil':
         return efoilImg;
       default:
-        return kitesurfImg;
+        return portImg;
     }
   };
 
@@ -37,7 +38,7 @@ const Reservation = () => {
       >
         <div className="absolute inset-0 bg-black bg-opacity-50" />
         <div className="relative z-10 container mx-auto py-12 px-4">
-          <h1 className="text-4xl font-bold text-center w-full text-white">Réservation</h1>
+          <h1 className="text-4xl font-bold text-center w-full text-white"></h1>
           <ReservationForm />
         </div>
       </main>

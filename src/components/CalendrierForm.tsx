@@ -64,10 +64,21 @@ const CalendrierForm = () => {
 
   const css = `
     .rdp {
-      --rdp-cell-size: 45px;
+      --rdp-cell-size: clamp(32px, 7vw, 45px);
       --rdp-accent-color: #3b82f6;
       --rdp-background-color: #e0e7ff;
       margin: 0;
+    }
+    @media (max-width: 640px) {
+      .rdp {
+        font-size: 14px;
+      }
+      .rdp-caption {
+        padding: 0 0.5rem;
+      }
+      .rdp-nav {
+        padding: 0;
+      }
     }
     .rdp-day_selected:not([disabled]) { 
       background-color: var(--rdp-accent-color);
@@ -80,6 +91,12 @@ const CalendrierForm = () => {
     .rdp-day:hover:not([disabled]) {
       background-color: #dbeafe;
     }
+    .rdp-button:hover:not([disabled]) {
+      background-color: #dbeafe;
+    }
+    .rdp-nav_button:hover:not([disabled]) {
+      background-color: #dbeafe;
+    }
   `;
 
   return (
@@ -87,61 +104,58 @@ const CalendrierForm = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-2xl mx-auto p-8 bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl"
+      className="w-full max-w-2xl mx-auto p-3 sm:p-8 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl"
     >
       <style>{css}</style>
       <motion.h2 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="text-3xl font-bold mb-8 text-gray-800"
+        className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-8 text-gray-800 text-center"
       >
         Choisissez une date
       </motion.h2>
       
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4 }}
-        className="flex flex-col items-center space-y-6"
-      >
-        <div className="p-4 bg-white rounded-xl shadow-lg">
+      <div className="flex flex-col items-center space-y-4 sm:space-y-6">
+        <div className="w-full max-w-[350px] mx-auto">
           <DayPicker
             mode="single"
             selected={data.selectedDate}
             onSelect={handleDateChange}
             locale={fr}
-            fromDate={new Date()}
+            className="mx-auto"
             modifiers={{
               disabled: [
                 { before: new Date() }
               ]
             }}
             modifiersStyles={{
-              disabled: { color: '#ddd' }
+              disabled: { opacity: 0.5 }
             }}
           />
         </div>
-
+        
         {data.selectedDate && (
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-lg font-medium text-gray-800"
+            className="text-sm sm:text-base text-gray-600 text-center"
           >
-            Date sélectionnée : {format(data.selectedDate, 'dd MMMM yyyy', { locale: fr })}
+            Date sélectionnée : {format(data.selectedDate, 'dd/MM/yyyy', { locale: fr })}
           </motion.p>
         )}
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
           onClick={handleConfirm}
-          className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-colors"
+          disabled={!data.selectedDate}
+          className="w-full sm:w-auto py-3 sm:py-2 px-6 text-base sm:text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
         >
           Confirmer la réservation
         </motion.button>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

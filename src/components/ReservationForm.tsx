@@ -10,6 +10,7 @@ import { fr } from 'date-fns/locale/fr';
 import kitesurfImg from "@/assets/images/kitesurf.jpg";
 import wingfoilImg from "@/assets/images/wingfoil.jpg";
 import efoilImg from "@/assets/images/efoil.jpg";
+import portImg from "@/assets/images/port.jpg";
 
 registerLocale('fr', fr);
 
@@ -59,16 +60,7 @@ const step2Schema = z.object({
 type FormValues = z.infer<typeof step1Schema>;
 
 const getBackgroundImage = (sport: string) => {
-  switch (sport.toLowerCase()) {
-    case 'kitesurf':
-      return kitesurfImg;
-    case 'wingfoil':
-      return wingfoilImg;
-    case 'efoil':
-      return efoilImg;
-    default:
-      return kitesurfImg;
-  }
+  return portImg;  // Retourne toujours l'image du port
 };
 
 const ReservationForm = () => {
@@ -110,30 +102,30 @@ const ReservationForm = () => {
   const backgroundImage = getBackgroundImage(sport || sportFromState || "");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/0 to-blue-100/0 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/0 to-blue-100/0 py-4 sm:py-12">
+      <div className="w-full max-w-3xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="bg-white/90 backdrop-blur-sm rounded-lg sm:rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-blue-600 py-12 px-6 relative">
-            <h2 className="text-3xl font-bold text-white text-center">
+          <div className="bg-blue-600 py-6 sm:py-12 px-4 sm:px-6 relative">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-center">
               {step === 1 ? "Informations de réservation" : "Informations du rider"}
             </h2>
           </div>
 
           {/* Indicateur de progression */}
-          <div className="px-8 pt-6">
-            <div className="flex items-center justify-between mb-8">
+          <div className="px-4 sm:px-8 pt-4 sm:pt-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-8">
               <div className="w-full">
                 <div className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base ${
                     step >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'
                   }`}>
                     1
                   </div>
-                  <div className={`flex-1 h-1 mx-4 ${
+                  <div className={`flex-1 h-1 mx-2 sm:mx-4 ${
                     step === 2 ? 'bg-blue-600' : 'bg-gray-200'
                   }`}></div>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-sm sm:text-base ${
                     step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'
                   }`}>
                     2
@@ -143,105 +135,108 @@ const ReservationForm = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8">
-            <div className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="px-4 sm:px-8 pb-6 sm:pb-8">
+            <div className="space-y-4 sm:space-y-6">
               {step === 1 ? (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Prénom</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
                       <input
                         {...register("firstNameReservation")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.firstNameReservation && (
-                        <p className="mt-1 text-sm text-red-600">{errors.firstNameReservation.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.firstNameReservation.message}</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Nom</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
                       <input
                         {...register("lastNameReservation")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.lastNameReservation && (
-                        <p className="mt-1 text-sm text-red-600">{errors.lastNameReservation.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.lastNameReservation.message}</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Email</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input
                       {...register("email")}
                       type="email"
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email.message}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
                     <input
                       {...register("phone")}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {errors.phone && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.phone.message}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Adresse</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
                     <input
                       {...register("address")}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {errors.address && (
-                      <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.address.message}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Ville</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ville</label>
                     <input
                       {...register("city")}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     />
                     {errors.city && (
-                      <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.city.message}</p>
                     )}
                   </div>
                 </>
+
               ) : (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Prénom du rider</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Prénom du rider</label>
                       <input
                         {...register("firstNameRider")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.firstNameRider && (
-                        <p className="mt-1 text-sm text-red-600">{errors.firstNameRider.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.firstNameRider.message}</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Nom du rider</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Nom du rider</label>
                       <input
                         {...register("lastNameRider")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.lastNameRider && (
-                        <p className="mt-1 text-sm text-red-600">{errors.lastNameRider.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.lastNameRider.message}</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Date de naissance</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Date de naissance</label>
                     <Controller
                       control={control}
                       name="birthDate"
@@ -249,47 +244,51 @@ const ReservationForm = () => {
                         <DatePicker
                           selected={field.value}
                           onChange={(date) => field.onChange(date)}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                           dateFormat="dd/MM/yyyy"
                           locale="fr"
                           placeholderText="Sélectionnez une date"
+                          showYearDropdown
+                          scrollableYearDropdown
+                          yearDropdownItemNumber={100}
+                          dropdownMode="select"
                         />
                       )}
                     />
                     {errors.birthDate && (
-                      <p className="mt-1 text-sm text-red-600">{errors.birthDate.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.birthDate.message}</p>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Taille (cm)</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Taille (cm)</label>
                       <input
                         {...register("height")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.height && (
-                        <p className="mt-1 text-sm text-red-600">{errors.height.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.height.message}</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Poids (kg)</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Poids (kg)</label>
                       <input
                         {...register("weight")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.weight && (
-                        <p className="mt-1 text-sm text-red-600">{errors.weight.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.weight.message}</p>
                       )}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Taille combinaison</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Taille combinaison</label>
                       <select
                         {...register("suitSize")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       >
                         <option value="">Sélectionnez une taille</option>
                         <option value="XS">XS</option>
@@ -299,26 +298,26 @@ const ReservationForm = () => {
                         <option value="XL">XL</option>
                       </select>
                       {errors.suitSize && (
-                        <p className="mt-1 text-sm text-red-600">{errors.suitSize.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.suitSize.message}</p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Pointure</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Pointure</label>
                       <input
                         {...register("shoeSize")}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                       />
                       {errors.shoeSize && (
-                        <p className="mt-1 text-sm text-red-600">{errors.shoeSize.message}</p>
+                        <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.shoeSize.message}</p>
                       )}
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Niveau</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Niveau</label>
                     <select
                       {...register("level")}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="block w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Sélectionnez un niveau</option>
                       <option value="debutant">Débutant</option>
@@ -326,25 +325,26 @@ const ReservationForm = () => {
                       <option value="avance">Avancé</option>
                     </select>
                     {errors.level && (
-                      <p className="mt-1 text-sm text-red-600">{errors.level.message}</p>
+                      <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.level.message}</p>
                     )}
                   </div>
                 </>
+
               )}
 
-              <div className="flex justify-between pt-6">
+              <div className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 pt-6">
                 {step === 2 && (
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="inline-flex items-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    className="w-full sm:w-auto py-3 sm:py-2 px-4 text-base sm:text-sm border border-blue-600 font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex justify-center items-center"
                   >
                     Retour
                   </button>
                 )}
                 <button
                   type="submit"
-                  className="ml-auto inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+                  className="w-full sm:w-auto py-3 sm:py-2 px-6 text-base sm:text-sm border border-transparent font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex justify-center items-center transition-colors duration-200"
                 >
                   {step === 1 ? "Suivant" : "Réserver"}
                 </button>

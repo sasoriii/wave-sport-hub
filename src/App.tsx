@@ -8,6 +8,7 @@ import Reservation from "./pages/ReservationForm";
 import ActivityDetail from "./pages/ActivityDetails";
 import TYpages from "./pages/TYpages";
 import Calendrier from "./pages/Calendrier";
+import FormuleSelection from "./pages/FormuleSelection";
 import { ReservationProvider } from "./contexts/ReservationContext";
 
 const queryClient = new QueryClient();
@@ -21,7 +22,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/reservation/:activity" element={<Reservation />} />
+            <Route path="/formules/:sport" element={<FormuleSelection />} />
+            <Route path="/reservation/:sport/:formule" element={<Reservation />} />
             <Route path="/:activity" element={<ActivityDetail />} />
             <Route path="/TYpages" element={<TYpages />} />
             <Route path="/Calendar" element={<Calendrier />} />
