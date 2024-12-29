@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import kitesurfImg from "@/assets/images/kitesurf.jpg";
 import wingfoilImg from "@/assets/images/wingfoil.jpg";
 import efoilImg from "@/assets/images/efoil.jpg";
+import portImg from "@/assets/images/port.jpg";
 
 const Calendrier = () => {
   const location = useLocation();
@@ -12,13 +13,13 @@ const Calendrier = () => {
   const getBackgroundImage = (sport: string) => {
     switch (sport?.toLowerCase()) {
       case 'kitesurf':
-        return kitesurfImg;
+        return portImg;
       case 'wingfoil':
-        return wingfoilImg;
+        return portImg;
       case 'efoil':
-        return efoilImg;
+        return portImg;
       default:
-        return kitesurfImg;
+        return portImg;
     }
   };
 
@@ -28,7 +29,7 @@ const Calendrier = () => {
     <div className="min-h-screen">
       <Navbar />
       <main 
-        className="min-h-[calc(100vh-64px)] relative"
+        className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
@@ -36,7 +37,7 @@ const Calendrier = () => {
           backgroundAttachment: 'fixed'
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 container mx-auto py-12 px-4">
           <CalendrierForm />
         </div>

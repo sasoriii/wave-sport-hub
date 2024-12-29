@@ -1,38 +1,39 @@
-import { DayPicker } from "react-day-picker";
-import { format } from "date-fns";
+import React from 'react';
+import { Calendar } from '@/components/ui/calendar';
 import { fr } from 'date-fns/locale';
-import "react-day-picker/dist/style.css";
-import { useNavigate } from "react-router-dom";
+import { addDays, format } from 'date-fns';
+import { motion } from 'framer-motion';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useReservation } from "../contexts/ReservationContext";
-import { motion } from "framer-motion";
 
 const CalendrierForm = () => {
-  const { data, updateData } = useReservation();
+  const location = useLocation();
   const navigate = useNavigate();
+  const { data, updateData } = useReservation();
+  const formData = location.state?.formData;
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined);
 
-  const handleDateChange = (date: Date | undefined) => {
-    if (date) {
-      updateData({ selectedDate: date });
-    }
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date);
   };
 
   const handleConfirm = async () => {
-    if (data.selectedDate) {
+    if (selectedDate) {
       try {
         const info = `
-          Reservation: ${data.firstNameReservation} ${data.lastNameReservation}
-          Address: ${data.address}, ${data.city}
-          Phone: ${data.phone}
-          Rider: ${data.firstNameRider} ${data.lastNameRider}
-          Birth Date: ${data.birthDay}/${data.birthMonth}/${data.birthYear}
-          Height: ${data.height}cm
-          Weight: ${data.weight}kg
-          Suit Size: ${data.suitSize}
-          Shoe Size: ${data.shoeSize}
-          Level: ${data.level}
+          Reservation: ${formData.firstNameReservation} ${formData.lastNameReservation}
+          Address: ${formData.address}, ${formData.city}
+          Phone: ${formData.phone}
+          Rider: ${formData.firstNameRider} ${formData.lastNameRider}
+          Birth Date: ${format(formData.birthDate, 'dd/MM/yyyy')}
+          Height: ${formData.height}cm
+          Weight: ${formData.weight}kg
+          Suit Size: ${formData.suitSize}
+          Shoe Size: ${formData.shoeSize}
+          Level: ${formData.level}
         `.trim();
 
-        const formattedDate = data.selectedDate.toISOString().split('T')[0];
+        const formattedDate = selectedDate.toISOString().split('T')[0];
 
         const response = await fetch('https://back.jeremgabriel.com/HiptoForm/index.php/API/addEvent', {
           method: 'POST',
@@ -41,8 +42,8 @@ const CalendrierForm = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            sport: data.sport.toLowerCase(),
-            email: data.email,
+            sport: formData.sport.toLowerCase(),
+            email: formData.email,
             date: formattedDate,
             info: info
           })
@@ -52,7 +53,7 @@ const CalendrierForm = () => {
           throw new Error('Failed to submit reservation');
         }
 
-        navigate("/confirmation");
+        navigate("/confirmation", { replace: true });
       } catch (error) {
         console.error('Error submitting reservation:', error);
         alert("Une erreur s'est produite lors de la réservation. Veuillez réessayer.");
@@ -62,101 +63,110 @@ const CalendrierForm = () => {
     }
   };
 
-  const css = `
-    .rdp {
-      --rdp-cell-size: clamp(32px, 7vw, 45px);
-      --rdp-accent-color: #3b82f6;
-      --rdp-background-color: #e0e7ff;
-      margin: 0;
-    }
-    @media (max-width: 640px) {
-      .rdp {
-        font-size: 14px;
-      }
-      .rdp-caption {
-        padding: 0 0.5rem;
-      }
-      .rdp-nav {
-        padding: 0;
-      }
-    }
-    .rdp-day_selected:not([disabled]) { 
-      background-color: var(--rdp-accent-color);
-      color: white;
-      font-weight: bold;
-    }
-    .rdp-day_selected:hover:not([disabled]) {
-      background-color: #2563eb;
-    }
-    .rdp-day:hover:not([disabled]) {
-      background-color: #dbeafe;
-    }
-    .rdp-button:hover:not([disabled]) {
-      background-color: #dbeafe;
-    }
-    .rdp-nav_button:hover:not([disabled]) {
-      background-color: #dbeafe;
-    }
-  `;
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto p-3 sm:p-8 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-xl"
-    >
-      <style>{css}</style>
-      <motion.h2 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-8 text-gray-800 text-center"
+    <div className="relative z-10 container mx-auto py-12 px-4">
+      <motion.div 
+        className="max-w-3xl mx-auto bg-white/40 backdrop-blur-sm rounded-2xl shadow-2xl p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        Choisissez une date
-      </motion.h2>
-      
-      <div className="flex flex-col items-center space-y-4 sm:space-y-6">
-        <div className="w-full max-w-[350px] mx-auto">
-          <DayPicker
-            mode="single"
-            selected={data.selectedDate}
-            onSelect={handleDateChange}
-            locale={fr}
-            className="mx-auto"
-            modifiers={{
-              disabled: [
-                { before: new Date() }
-              ]
-            }}
-            modifiersStyles={{
-              disabled: { opacity: 0.5 }
-            }}
-          />
-        </div>
-        
-        {data.selectedDate && (
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-sm sm:text-base text-gray-600 text-center"
-          >
-            Date sélectionnée : {format(data.selectedDate, 'dd/MM/yyyy', { locale: fr })}
-          </motion.p>
-        )}
+        <h2 className="text-4xl font-bold text-white mb-8 text-center">
+          Sélectionnez votre date
+        </h2>
 
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          onClick={handleConfirm}
-          disabled={!data.selectedDate}
-          className="w-full sm:w-auto py-3 sm:py-2 px-6 text-base sm:text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
-        >
-          Confirmer la réservation
-        </motion.button>
-      </div>
-    </motion.div>
+        <div className="space-y-8">
+          {/* Calendrier */}
+          <div className="flex justify-center bg-white/80 backdrop-blur-none rounded-xl p-8 shadow-lg">
+            <style>{`
+              .rdp {
+                --rdp-cell-size: 60px !important;
+                --rdp-accent-color: #3b82f6 !important;
+                --rdp-background-color: rgba(255, 255, 255, 0.1) !important;
+                margin: 0 auto !important;
+              }
+              .rdp-button:hover:not([disabled]) {
+                background-color: rgba(59, 130, 246, 0.5) !important;
+              }
+              .rdp-day_selected {
+                background-color: #3b82f6 !important;
+                font-weight: bold;
+              }
+              .rdp-day_selected:hover {
+                background-color: #2563eb !important;
+              }
+              .rdp-day {
+                color: #1a1a1a !important;
+                font-size: 1.25rem !important;
+                font-weight: 500 !important;
+              }
+              .rdp-nav_button, .rdp-head_cell {
+                color: #1a1a1a !important;
+                font-weight: 600 !important;
+                font-size: 1.1rem !important;
+              }
+              .rdp-nav_button:hover {
+                background-color: rgba(59, 130, 246, 0.1) !important;
+              }
+              .rdp-caption {
+                font-size: 1.4rem !important;
+                color: #1a1a1a !important;
+                font-weight: 600 !important;
+                margin-bottom: 1rem !important;
+                text-align: center !important;
+              }
+              .rdp-day[disabled] {
+                opacity: 0.35 !important;
+              }
+              .rdp-head_cell {
+                font-size: 1rem !important;
+                text-transform: uppercase !important;
+                font-weight: 600 !important;
+                text-align: center !important;
+              }
+              .rdp-table {
+                margin: 0 auto !important;
+              }
+            `}</style>
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={handleDateSelect}
+              locale={fr}
+              className="mx-auto"
+              fromDate={new Date()}
+              toDate={addDays(new Date(), 60)}
+              modifiers={{
+                disabled: [{ before: new Date() }],
+                highlighted: selectedDate ? [selectedDate] : []
+              }}
+            />
+          </div>
+
+          {/* Résumé et confirmation */}
+          {selectedDate && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-white/80 backdrop-blur-none rounded-xl p-8 shadow-lg"
+            >
+              <h4 className="text-2xl font-semibold text-gray-800 mb-4">
+                Résumé de votre réservation
+              </h4>
+              <p className="text-gray-800 text-xl mb-6">
+                Date sélectionnée : {format(selectedDate, 'dd MMMM yyyy', { locale: fr })}
+              </p>
+              <button
+                onClick={handleConfirm}
+                className="w-full px-8 py-4 bg-blue-600 text-white text-xl rounded-xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1"
+              >
+                Confirmer la réservation
+              </button>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

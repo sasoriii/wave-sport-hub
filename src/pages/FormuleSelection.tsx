@@ -7,7 +7,8 @@ interface Formule {
   id: string;
   title: string;
   description: string;
-  price?: string;
+  priceLowSeason?: string;
+  priceHighSeason?: string;
   duration?: string;
   icon?: string;
 }
@@ -25,27 +26,36 @@ const FormuleSelection = () => {
             id: '1jour', 
             title: 'Cours 1 jour', 
             description: 'Une journée intensive pour découvrir ou progresser',
-            duration: '1 jour',
+            duration: '3h',
+            priceLowSeason: '110,00 €',
+            priceHighSeason: '150,00 €',
             icon: '🌅'
           },
           { 
             id: '3jours', 
             title: 'Cours 3 jours', 
             description: 'Programme sur 3 jours pour une meilleure maîtrise',
-            duration: '3 jours',
+            duration: '3h/jour',
+            priceLowSeason: '330,00 €',
+            priceHighSeason: '420,00 €',
             icon: '🌊'
           },
           { 
             id: '5jours', 
             title: 'Cours 5 jours', 
             description: 'Formation complète sur 5 jours',
-            duration: '5 jours',
+            duration: '3h/jour',
+            priceLowSeason: '530,00 €',
+            priceHighSeason: '650,00 €',
             icon: '🏄‍♂️'
           },
           { 
             id: 'surveillance', 
             title: 'Navigation surveillée', 
             description: 'Navigation en autonomie avec surveillance',
+            duration: '3h',
+            priceLowSeason: '90,00 €',
+            priceHighSeason: '90,00 €',
             icon: '👀'
           }
         ];
@@ -55,39 +65,54 @@ const FormuleSelection = () => {
             id: '1jour', 
             title: 'Cours 1 jour', 
             description: 'Initiation à l\'eFoil sur une journée',
-            duration: '1 jour',
+            duration: '1h',
+            priceLowSeason: '120,00 €',
+            priceHighSeason: '120,00 €',
             icon: '🌅'
           },
           { 
             id: '3jours', 
             title: 'Cours 3 jours', 
             description: 'Programme approfondi sur 3 jours',
-            duration: '3 jours',
+            duration: '1h/jour',
+            priceLowSeason: '330,00 €',
+            priceHighSeason: '330,00 €',
             icon: '🌊'
           },
           { 
             id: '5jours', 
             title: 'Cours 5 jours', 
             description: 'Maîtrise complète sur 5 jours',
-            duration: '5 jours',
+            duration: '5h/jour',
+            priceLowSeason: '500,00 €',
+            priceHighSeason: '500,00 €',
             icon: '🏄‍♂️'
           },
           { 
             id: 'duo', 
             title: 'Session Duo', 
             description: 'Partagez l\'expérience à deux',
+            duration: '1h',
+            priceLowSeason: '160,00 € soit 80,00 € par personne',
+            priceHighSeason: '160,00 €',
             icon: '👥'
           },
           { 
             id: 'apero2', 
             title: 'Apéro/Sunset 2 personnes', 
             description: 'Session sunset pour 2 personnes',
+            duration: '3h',
+            priceLowSeason: '300,00 € soit 150,00 € par personne',
+            priceHighSeason: '300,00 € soit 150,00 € par personne',
             icon: '🌅'
           },
           { 
             id: 'apero4', 
             title: 'Apéro/Sunset 4 personnes', 
             description: 'Session sunset pour 4 personnes',
+            duration: '3h',
+            priceLowSeason: '550,00 € soit 137,50 € par personne',
+            priceHighSeason: '550,00 € soit 137,50 € par personne',
             icon: '🎉'
           }
         ];
@@ -119,7 +144,6 @@ const FormuleSelection = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Background image avec overlay */}
       <div 
         className="absolute inset-0 z-0"
         style={{ 
@@ -132,13 +156,12 @@ const FormuleSelection = () => {
         <div className="absolute inset-0 bg-black/60" />
       </div>
 
-      {/* Contenu */}
       <div className="relative z-10">
         <Navbar />
         
-        <div className="pt-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex flex-col justify-center">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen">
           <motion.h1 
-            className="text-6xl font-bold text-white mb-12 text-center -mt-20"
+            className="text-6xl font-bold text-white mb-12 text-center pt-20"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -179,13 +202,24 @@ const FormuleSelection = () => {
                   {formule.description}
                 </p>
                 
-                <div className="mt-6 flex items-center justify-between">
-                  {formule.price && (
-                    <span className="text-2xl font-bold text-blue-700">
-                      {formule.price}
-                    </span>
+                <div className="mt-6 flex flex-col space-y-2">
+                  {formule.priceLowSeason && formule.priceHighSeason ? (
+                    <>
+                      <div className="text-lg">
+                        <span className="font-semibold text-blue-700">Basse saison : </span>
+                        <span className="font-bold">{formule.priceLowSeason}</span>
+                      </div>
+                      <div className="text-lg">
+                        <span className="font-semibold text-blue-700">Haute saison : </span>
+                        <span className="font-bold">{formule.priceHighSeason}</span>
+                      </div>
+                    </>
+                  ) : formule.priceLowSeason && (
+                    <div className="text-2xl font-bold text-blue-700">
+                      {formule.priceLowSeason}
+                    </div>
                   )}
-                  <div className="ml-auto text-2xl transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-600">
+                  <div className="text-2xl transform translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-blue-600 text-right">
                     →
                   </div>
                 </div>

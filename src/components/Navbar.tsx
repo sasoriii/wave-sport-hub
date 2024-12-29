@@ -6,7 +6,7 @@ const Navbar = () => {
   const menuItems = ["Accueil", "Kitesurf", "Wingfoil", "Efoil"];
 
   return (
-    <nav className="bg-gradient-to-r from-blue-900 to-blue-700 fixed w-full z-50">
+    <nav className="bg-black/90 backdrop-blur-sm fixed w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -26,7 +26,7 @@ const Navbar = () => {
                 <Link
                   key={item}
                   to="/"
-                  className="text-gray-100 hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105"
+                  className="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 transform hover:scale-105"
                 >
                   {item}
                 </Link>
@@ -38,7 +38,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-100 hover:text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-800 focus:ring-white"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-300 hover:text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
             >
               <span className="sr-only">Open main menu</span>
               {!isOpen ? (
@@ -84,7 +84,7 @@ const Navbar = () => {
             <Link
               key={item}
               to="/"
-              className="text-gray-100 hover:bg-blue-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
+              className="text-gray-300 hover:bg-gray-900 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300"
               onClick={() => setIsOpen(false)}
             >
               {item}
