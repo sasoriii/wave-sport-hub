@@ -76,7 +76,7 @@ const ActivityCard = ({ title, imageUrl }: ActivityCardProps) => {
       </motion.div>
 
       <div className="absolute bottom-0 left-0 right-0 text-center pb-4 md:pb-8 z-10">
-        <p className="text-white/90 text-sm md:text-base max-w-[280px] mx-auto px-4">
+        <p className="text-white/100 opacity-70 text-sm md:text-base max-w-[380px] mx-auto px-4">
           {description}
         </p>
       </div>

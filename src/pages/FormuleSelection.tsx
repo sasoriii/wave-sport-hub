@@ -83,7 +83,7 @@ const FormuleSelection = () => {
             id: '5jours', 
             title: 'Cours 5 jours', 
             description: 'Maîtrise complète sur 5 jours',
-            duration: '5h/jour',
+            duration: '1h/jour',
             priceLowSeason: '500,00 €',
             priceHighSeason: '500,00 €',
             icon: '🏄‍♂️'
